@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Project 4</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: url("./image/bg.jpg");
+      background-size:cover;
+      background-attachment:fixed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row p-5">
+      <div class="col-4 mt-5 p-5" style="background: url(./image/fp.jpg);">
+        <h1 class="text-white text-center">Ramalan Cuaca</h1>
+      </div>
+      <div class="col-8 mt-5" style="background-color: rgb(55, 55, 77)"> 
+        <div class="mb-3">
+          <div class="input-group mt-5 p-5">
+            <input type="text" class="form-control" placeholder="masukkan kota" id="cityinput">
+            <button class="btn btn-outline-success" type="submit" placeholder="submit" id="add">Submit</button>
+          </div>
+          <h2 class="text-center text-white mt-5" id="cityoutput"></h2>
+            <p class="text-center text-white" id="description"></p>
+            <p class="text-center text-white" id="temp"></p>
+            <p class="text-center text-white mb-5" id="wind"></p>
+          <br>
+          <br>
+          <br>
+          <footer>
+            <div class="text-center text-white p-3">
+                2023 ©
+              <a class="text-white" href="">Hidayatul Khasanah</a>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  var inputval = document.querySelector('#cityinput')
+  var btn = document.querySelector('#add');
+  var city = document.querySelector('#cityoutput')
+  var descrip = document.querySelector('#description')
+  var temp = document.querySelector('#temp')
+  var wind = document.querySelector('#wind')
+  apik = "3045dd712ffe6e702e3245525ac7fa38"
+  function convertion(val)
+  {
+      return (val - 273).toFixed(2)
+  }
+  btn.addEventListener('click', function()
+  {
+    fetch('https://api.openweathermap.org/data/2.5/weather?q='+inputval.value+'&appid='+apik)
+    .then(res => res.json())
+    .then(data => 
+    {
+      var nameval = data['name']
+      var descrip = data['weather']['0']['description']
+      var tempature = data['main']['temp']
+      var wndspd = data['wind']['speed']
+      city.innerHTML=`Weather of <span>${nameval}<span>`
+      temp.innerHTML = `Temperature: <span>${ convertion(tempature)} C</span>`
+      description.innerHTML = `Sky Conditions: <span>${descrip}<span>`
+      wind.innerHTML = `Wind Speed: <span>${wndspd} km/h<span>`
+    })
+    .catch(err => alert('You entered Wrong city name'))
+  })
+  </script>
+</html>
